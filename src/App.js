@@ -4,8 +4,8 @@ import InputField from './InputField';
 import StockInformation from './StockInformation'
 import loading from './loading.gif'
 
-//Make it so when notes are long, longer notes move to the next line, instead of implode the UI and extend forever.
 //Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
+//Add delete button to remove stocks from your portfolio.
 
 class App extends Component {
   constructor() {
@@ -39,17 +39,11 @@ class App extends Component {
 
   onFilterPortfolio = (e) => {
     if (e.target.value === '') {
-      this.setState({filteredPortfolioList: this.state.portfolioList}, () => {
-        console.log(this.state.portfolioList)
-        console.log(this.state.filteredPortfolioList)
-      })
+      this.setState({filteredPortfolioList: this.state.portfolioList})
     } else {
       this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
         return stock[0].includes(e.target.value.toUpperCase())
-      })}, () => {
-        console.log(this.state.portfolioList)
-        console.log(this.state.filteredPortfolioList)
-      })
+      })})
     }
   }
 
@@ -70,7 +64,7 @@ class App extends Component {
     document.querySelector('.add_value').value = ''
     document.querySelector('.filterinput').value = ''
     const list = this.state.portfolioList
-    list.push([`${this.state.statistics['01. symbol']}`, `(No. of Shares: ${this.state.sharesInput})`, `(Total Current Value of Shares: $${Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100})`, `(${this.state.notesInput})`])
+    list.push([`${this.state.statistics['01. symbol']}`, `No. of Shares: ${this.state.sharesInput}`, `Total Current Value of Shares: $${Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100}`, `Notes: ${this.state.notesInput}`])
     this.setState({portfolioList: list}, () => {
       this.setState({filteredPortfolioList: this.state.portfolioList})
     })
@@ -159,8 +153,8 @@ class App extends Component {
       return (
         <div className="App">
           <div className="header">
-            <h1>Welcome to StockViewer</h1>
-            <h2>Search for stocks and put them into your portfolio!</h2>
+            <h2 className="title">StockViewer</h2>
+            <h4 className="subtitle">Search for stocks and put them into your portfolio!</h4>
           </div>
           <div className="center">
             <InputField searchChange={this.onSearchChange} enterPress={this.onEnterPress}/>
@@ -168,23 +162,29 @@ class App extends Component {
           </div><br/>
           <div className='twoscreencontainer'>
             <div className='portfolio'>
-              <h1>Portfolio Value: ${this.state.portfolioValue}</h1>
-              <div>
+              <div className="portfolioheader">
+                <p className="twoscreenheaders">Portfolio Value: ${this.state.portfolioValue}</p>
                 <input placeholder="use this to filter your portfolio!" className="filterinput" onChange={this.onFilterPortfolio}></input>
+              </div>
+              <div>
                 {this.state.filteredPortfolioList.map((stock, i) => {
                   return <div className="portfoliostockdiv" key={i}><p className="portfoliostockp">{stock[0]}</p><p className="portfoliostockp">{stock[1]}</p><p className="portfoliostockp">{stock[2]}</p><p className="portfoliostockp">{stock[3]}</p></div>
                 })}
               </div>
             </div>
             <div className='info'>
+              <div className="infoheader">
+                <p className="twoscreenheaders">Your Stock Search Results:</p>
+                <input className="filterinput placeholder" placeholder="placeholder"></input>
+              </div>
               <h1 style={{display: this.state.badSearch === true ? 'block' : 'none'}}>No Results Found.</h1>
               <img src={loading} alt='' className="loading" style={{display: this.state.apiLoading === true ? 'block' : 'none'}}/>
               <div style={{display: this.state.showStockList === true ? 'block' : 'none'}}>
                 {this.state.stockList.map((stock, i) => {
-                  return <h3 onClick={this.getInfoFunction} id={i} key={i}>{stock['1. symbol']}: {stock['2. name']}</h3>
+                  return <p className="searchresults" onClick={this.getInfoFunction} id={i} key={i}>{stock['1. symbol']}: {stock['2. name']}</p>
                 })}
               </div>
-              <StockInformation 
+              <StockInformation
                         symbol={this.state.symbol}
                         currentPrice={this.state.currentPrice}
                         nominalChange={this.state.nominalChange}
@@ -207,20 +207,7 @@ class App extends Component {
     } else if (this.state.apiPromiseRejection === true) {
       return (
         <div className="App">
-          <h1>Welcome to StockViewer</h1>
-          <h2>Search for stocks and put them into your portfolio!</h2>
-          <div className="center">
-            <InputField searchChange={this.onSearchChange} enterPress={this.onEnterPress}/>
-            <button onClick={this.getStocksFunction}>Search!</button>
-          </div><br/>
-          <div className='twoscreencontainer'>
-            <div className='portfolio'>
-              <h1>Portfolio Value: ${this.state.portfolioValue}</h1>
-            </div>
-            <div className='info'>
-              <h1>Failed to retrieve data! Check your internet, or try again later!</h1>
-            </div>
-          </div>
+          <h1>Failed to retrieve data! Check your internet, or try again later!</h1>
         </div>
       )
     }
