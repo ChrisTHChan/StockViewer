@@ -6,6 +6,9 @@
 .center {
   display: flex;
   justify-content: center;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background-color: lightgray;
 }
 
 .searchBar {
@@ -49,4 +52,27 @@ h3:hover {
 
 .notesinput {
   width: 30vw;
+}
+
+.filterinput {
+  width: 30vw;
+}
+
+.header {
+  background-image: url(city.jpg);
+  padding-top:20px;
+  padding-bottom: 20px;
+  color: white;
+}
+
+.portfoliostockdiv {
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+
+.portfoliostockp {
+  padding: 5px;
+  margin: 0px;
 }

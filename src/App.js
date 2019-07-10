@@ -4,13 +4,8 @@ import InputField from './InputField';
 import StockInformation from './StockInformation'
 import loading from './loading.gif'
 
-//split bottom screen into 2 vertical halves (html/css) CHECK
-//the left side will be your portfolio. CHECK
-//add input field when you retrieve a stock from the stock list to add notes about the stock when its added to portfolio. CHECK
-//add button when you retrieve a stock from the stock list to add it to your portfolio. CHECK 
-//add functionality to buttons, wipe text from text fields when button is clicked. CHECK
-//add a method to allow you to search through your portfolio for various stocks that you want to see.
-//perhaps add a textfield that allows you to choose how many of one stock you want to add, and the total price, show percentage of portfolio that is made up from that stock.
+//Make it so when notes are long, longer notes move to the next line, instead of implode the UI and extend forever.
+//Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
 
 class App extends Component {
   constructor() {
@@ -25,6 +20,7 @@ class App extends Component {
       statistics: [],
       input: '',
       notesInput: '',
+      sharesInput: '',
       userStockSelection: '',
       symbol: '',
       currentPrice: '',
@@ -35,7 +31,25 @@ class App extends Component {
       dailyHigh: '',
       dailyLow: '',
       stockVolume: '',
-      portfolioList: []
+      portfolioList: [],
+      filteredPortfolioList: [],
+      portfolioValue: 0,
+    }
+  }
+
+  onFilterPortfolio = (e) => {
+    if (e.target.value === '') {
+      this.setState({filteredPortfolioList: this.state.portfolioList}, () => {
+        console.log(this.state.portfolioList)
+        console.log(this.state.filteredPortfolioList)
+      })
+    } else {
+      this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
+        return stock[0].includes(e.target.value.toUpperCase())
+      })}, () => {
+        console.log(this.state.portfolioList)
+        console.log(this.state.filteredPortfolioList)
+      })
     }
   }
 
@@ -46,13 +60,22 @@ class App extends Component {
   onNotesChange = (e) => {
     this.setState({notesInput: e.target.value})
   }
+  
+  onNumberOfSharesChange = (e) => {
+    this.setState({sharesInput: parseInt(e.target.value)})
+  }
 
   onAppendStock = () => {
     document.querySelector('.notesinput').value = ''
+    document.querySelector('.add_value').value = ''
+    document.querySelector('.filterinput').value = ''
     const list = this.state.portfolioList
-    list.push(`${this.state.statistics['01. symbol']} (${this.state.notesInput})`)
-    this.setState({portfolioList: list})
+    list.push([`${this.state.statistics['01. symbol']}`, `(No. of Shares: ${this.state.sharesInput})`, `(Total Current Value of Shares: $${Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100})`, `(${this.state.notesInput})`])
+    this.setState({portfolioList: list}, () => {
+      this.setState({filteredPortfolioList: this.state.portfolioList})
+    })
     this.setState({showInfo: false})
+    this.setState({portfolioValue: Math.floor((this.state.portfolioValue + (this.state.sharesInput * this.state.statistics['05. price'])) * 100) / 100})
   }
 
   showBadSearchMessage = () => {
@@ -68,7 +91,8 @@ class App extends Component {
       this.getStocksFunction()
     }
   }
-  onPressEnterNotesChange = (e) => {
+
+  onEnterPressShares = (e) => {
     if (e.which === 13) {
       this.onAppendStock()
     }
@@ -134,18 +158,21 @@ class App extends Component {
     if (this.state.apiPromiseRejection === false) {
       return (
         <div className="App">
-          <h1>Welcome to StockViewer</h1>
-          <h2>Search for stocks and put them into your portfolio!</h2>
+          <div className="header">
+            <h1>Welcome to StockViewer</h1>
+            <h2>Search for stocks and put them into your portfolio!</h2>
+          </div>
           <div className="center">
             <InputField searchChange={this.onSearchChange} enterPress={this.onEnterPress}/>
             <button onClick={this.getStocksFunction}>Search!</button>
           </div><br/>
           <div className='twoscreencontainer'>
             <div className='portfolio'>
-              <h1>Portfolio:</h1>
+              <h1>Portfolio Value: ${this.state.portfolioValue}</h1>
               <div>
-                {this.state.portfolioList.map((stock, i) => {
-                  return <p key={i}>{`${i + 1}. `}{stock}</p>
+                <input placeholder="use this to filter your portfolio!" className="filterinput" onChange={this.onFilterPortfolio}></input>
+                {this.state.filteredPortfolioList.map((stock, i) => {
+                  return <div className="portfoliostockdiv" key={i}><p className="portfoliostockp">{stock[0]}</p><p className="portfoliostockp">{stock[1]}</p><p className="portfoliostockp">{stock[2]}</p><p className="portfoliostockp">{stock[3]}</p></div>
                 })}
               </div>
             </div>
@@ -170,8 +197,9 @@ class App extends Component {
                         show={this.state.showInfo}
                         error={this.state.badSearch}
                         notesChange={this.onNotesChange}
-                        pressEnterNotesChange={this.onPressEnterNotesChange}
-                        appendStock={this.onAppendStock}/>
+                        enterPressShares={this.onEnterPressShares}
+                        appendStock={this.onAppendStock}
+                        numberOfSharesChange={this.onNumberOfSharesChange}/>
             </div>
           </div>
         </div>
@@ -187,7 +215,7 @@ class App extends Component {
           </div><br/>
           <div className='twoscreencontainer'>
             <div className='portfolio'>
-              <h1>Portfolio:</h1>
+              <h1>Portfolio Value: ${this.state.portfolioValue}</h1>
             </div>
             <div className='info'>
               <h1>Failed to retrieve data! Check your internet, or try again later!</h1>

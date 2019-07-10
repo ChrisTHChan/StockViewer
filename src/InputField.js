@@ -3,7 +3,7 @@ import React from 'react'
 const InputField = ({searchChange, enterPress}) => {
     return (
         <div>
-            <input onChange={searchChange} className="searchBar" onKeyPress={enterPress}/>
+            <input onChange={searchChange} className="searchBar" onKeyPress={enterPress} placeholder="Enter your stocks here!"/>
         </div>
     )
 }
