@@ -4,6 +4,7 @@ import InputField from './InputField';
 import StockInformation from './StockInformation'
 import loading from './loading.gif'
 
+//Work on button styling! Try to learn how to make an icon a part of the search bar as the button
 //Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
 //Add delete button to remove stocks from your portfolio.
 //Add a footer that describes your email, personal contact info, can download your resume (maybe? dunno how to do that.)
@@ -165,7 +166,7 @@ class App extends Component {
             <div className='portfolio'>
               <div className="portfolioheader">
                 <p className="twoscreenheaders">Portfolio Value: ${this.state.portfolioValue}</p>
-                <input placeholder="use this to filter your portfolio!" className="filterinput roundsearchbar" onChange={this.onFilterPortfolio}></input>
+                <input placeholder="Filter your portfolio!" className="filterinput roundsearchbar" onChange={this.onFilterPortfolio}></input>
               </div>
               <div>
                 {this.state.filteredPortfolioList.map((stock, i) => {
