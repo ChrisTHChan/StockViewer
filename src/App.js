@@ -6,6 +6,7 @@ import loading from './loading.gif'
 
 //Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
 //Add delete button to remove stocks from your portfolio.
+//Add a footer that describes your email, personal contact info, can download your resume (maybe? dunno how to do that.)
 
 class App extends Component {
   constructor() {
@@ -164,7 +165,7 @@ class App extends Component {
             <div className='portfolio'>
               <div className="portfolioheader">
                 <p className="twoscreenheaders">Portfolio Value: ${this.state.portfolioValue}</p>
-                <input placeholder="use this to filter your portfolio!" className="filterinput" onChange={this.onFilterPortfolio}></input>
+                <input placeholder="use this to filter your portfolio!" className="filterinput roundsearchbar" onChange={this.onFilterPortfolio}></input>
               </div>
               <div>
                 {this.state.filteredPortfolioList.map((stock, i) => {
@@ -175,7 +176,7 @@ class App extends Component {
             <div className='info'>
               <div className="infoheader">
                 <p className="twoscreenheaders">Your Stock Search Results:</p>
-                <input className="filterinput placeholder" placeholder="placeholder"></input>
+                <input className="filterinput placeholder roundsearchbar" placeholder="placeholder"></input>
               </div>
               <h1 style={{display: this.state.badSearch === true ? 'block' : 'none'}}>No Results Found.</h1>
               <img src={loading} alt='' className="loading" style={{display: this.state.apiLoading === true ? 'block' : 'none'}}/>

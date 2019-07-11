@@ -7,7 +7,7 @@
   justify-content: center;
   padding-top: 25px;
   padding-bottom: 25px;
-  background-color: lightgray;
+  background-color: rgba(235, 235, 235);
 }
 
 .header {
@@ -26,6 +26,20 @@
 .searchBar {
   width: 50vw;
   margin-right: 20px;
+}
+
+.roundsearchbar {
+  border-radius: 2em;
+  height: 30px;
+  padding: 0 0 0 15px;
+  font-size: 18px;
+  border: 1.3px solid lightgrey;
+}
+
+.roundsearchbar:focus {
+  outline: none;
+  border-radius: 2em;
+  border: 1.3px solid lightblue;
 }
 
 .twoscreenheaders {
