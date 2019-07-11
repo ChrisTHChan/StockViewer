@@ -16,7 +16,7 @@ const StockInformation = (props) => {
                 </div>
                 <pre className='pre'>Notes:  <input className='notesinput roundsearchbar' onChange={props.notesChange}></input></pre>
                 <pre className='pre'>How many shares you would like:  <input type="number" placeholder="Enter a number!" className="add_value roundsearchbar" onChange={props.numberOfSharesChange} onKeyPress={props.enterPressShares}></input></pre>
-                <button onClick={props.appendStock}>Submit to Portfolio!</button>
+                <button className='submittoportfolio' onClick={props.appendStock}><span>Submit to Portfolio!</span></button>
             </div>
         )
 }

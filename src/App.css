@@ -7,7 +7,7 @@
   justify-content: center;
   padding-top: 25px;
   padding-bottom: 25px;
-  background-color: rgba(235, 235, 235);
+  background-color: rgba(225, 225, 225);
 }
 
 .header {
@@ -23,9 +23,44 @@
   margin-left: 20px;
 }
 
-.searchBar {
+.searchcontainer {
   width: 50vw;
-  margin-right: 20px;
+  display: inline-flex;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1.3px solid transparent;
+}
+
+.searchcontainer:focus-within {
+  outline: none;
+  border: 1.3px solid lightblue;
+  border-radius: 50px;
+}
+
+.searchBar {
+  padding: 0.75rem;
+  flex: 1;
+  width: 50vw;
+  border: 0;
+  font-size: 16px;
+}
+
+.searchBar:focus {
+  outline: none;
+}
+
+.searchButton {
+  background: rgb(124, 159, 197);
+  color: white;
+  padding: 0.75rem;
+  border: 0;
+  transition: background 0.3s;
+  font-size: 16px;
+}
+
+.searchButton:hover {
+  background: rgb(70, 191, 231); 
+  cursor: pointer;
 }
 
 .roundsearchbar {
@@ -118,6 +153,44 @@
 .stocksymbol {
   font-size: 1.4rem;
   text-decoration: underline;
+}
+
+.submittoportfolio {
+  border-radius: 5px;
+  background-color: rgb(124, 159, 197);
+  border: 0;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px;
+  width: auto;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+.submittoportfolio span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.3s;
+}
+
+.submittoportfolio span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.3s;
+}
+
+.submittoportfolio:hover span {
+  padding-right: 25px;
+}
+
+.submittoportfolio:hover span:after {
+  opacity: 1;
+  right: 0;
 }
 
 .searchresults:hover {

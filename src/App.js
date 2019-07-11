@@ -4,7 +4,7 @@ import InputField from './InputField';
 import StockInformation from './StockInformation'
 import loading from './loading.gif'
 
-//Work on button styling! Try to learn how to make an icon a part of the search bar as the button
+//maybe work on header being sticky? see if it looks good?
 //Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
 //Add delete button to remove stocks from your portfolio.
 //Add a footer that describes your email, personal contact info, can download your resume (maybe? dunno how to do that.)
@@ -159,21 +159,12 @@ class App extends Component {
             <h4 className="subtitle">Search for stocks and put them into your portfolio!</h4>
           </div>
           <div className="center">
-            <InputField searchChange={this.onSearchChange} enterPress={this.onEnterPress}/>
-            <button onClick={this.getStocksFunction}>Search!</button>
+            <div className="searchcontainer">
+              <InputField searchChange={this.onSearchChange} enterPress={this.onEnterPress}/>
+              <button className='searchButton' onClick={this.getStocksFunction}>Search!</button>
+            </div>
           </div><br/>
           <div className='twoscreencontainer'>
-            <div className='portfolio'>
-              <div className="portfolioheader">
-                <p className="twoscreenheaders">Portfolio Value: ${this.state.portfolioValue}</p>
-                <input placeholder="Filter your portfolio!" className="filterinput roundsearchbar" onChange={this.onFilterPortfolio}></input>
-              </div>
-              <div>
-                {this.state.filteredPortfolioList.map((stock, i) => {
-                  return <div className="portfoliostockdiv" key={i}><p className="portfoliostockp">{stock[0]}</p><p className="portfoliostockp">{stock[1]}</p><p className="portfoliostockp">{stock[2]}</p><p className="portfoliostockp">{stock[3]}</p></div>
-                })}
-              </div>
-            </div>
             <div className='info'>
               <div className="infoheader">
                 <p className="twoscreenheaders">Your Stock Search Results:</p>
@@ -202,6 +193,17 @@ class App extends Component {
                         enterPressShares={this.onEnterPressShares}
                         appendStock={this.onAppendStock}
                         numberOfSharesChange={this.onNumberOfSharesChange}/>
+            </div>
+            <div className='portfolio'>
+              <div className="portfolioheader">
+                <p className="twoscreenheaders">Portfolio Value: ${this.state.portfolioValue}</p>
+                <input placeholder="Filter your portfolio!" className="filterinput roundsearchbar" onChange={this.onFilterPortfolio}></input>
+              </div>
+              <div>
+                {this.state.filteredPortfolioList.map((stock, i) => {
+                  return <div className="portfoliostockdiv" key={i}><p className="portfoliostockp">{stock[0]}</p><p className="portfoliostockp">{stock[1]}</p><p className="portfoliostockp">{stock[2]}</p><p className="portfoliostockp">{stock[3]}</p></div>
+                })}
+              </div>
             </div>
           </div>
         </div>
