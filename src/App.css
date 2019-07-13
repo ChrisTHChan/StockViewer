@@ -2,6 +2,8 @@
   text-align: center;
 }
 
+/* TOP SIDE AND CENTERING CSS STARTS HERE */
+
 .center {
   display: flex;
   justify-content: center;
@@ -88,38 +90,7 @@
   margin-bottom: 50px;
 }
 
-.portfolio {
-  margin: 10px;
-  margin-left: 30px;
-  margin-right: 15px;
-}
-
-.portfolioheader {
-  border-bottom: 2px solid grey;
-}
-
-.filterinput {
-  width: 30vw;
-  margin-bottom: 15px;
-}
-
-.placeholder {
-  visibility: hidden;
-}
-
-.portfoliostockdiv {
-  border-top: 2px dotted lightgrey;
-  border-bottom: 2px dotted lightgrey;
-  margin-top: 15px;
-}
-
-.portfoliostockp {
-  padding: 7px;
-  margin: 0px;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-}
+/* STOCK SEARCH/INFO SIDE CSS */
 
 .info {
   margin: 10px;
@@ -217,4 +188,73 @@ input[type='number'] {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+/* PORTFOLIO SIDE CSS STARTS HERE */
+
+.portfolio {
+  margin: 10px;
+  margin-left: 30px;
+  margin-right: 15px;
+}
+
+.portfolioheader {
+  border-bottom: 2px solid grey;
+}
+
+.filterinput {
+  width: 30vw;
+  margin-bottom: 15px;
+}
+
+.filterinputplaceholder {
+  width: 30vw;
+  margin-bottom: 15px;
+}
+
+.placeholder {
+  visibility: hidden;
+}
+
+.portfoliostockdiv {
+  display: grid;
+  border-top: 2px dotted lightgrey;
+  border-bottom: 2px dotted lightgrey;
+  margin-top: 15px;
+  grid-template-columns: minmax(0, 7.5fr) 1fr;
+  align-items: center;
+}
+
+.portfoliostockp {
+  padding: 7px;
+  margin: 0px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.deletebutton {
+  background-color: white;
+  border-radius: 50px;
+  border: 1px solid lightcoral;
+  color: lightcoral;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 1.5px #999;
+}
+
+.deletebutton:hover {
+  color: white;
+  background-color: lightcoral;
+}
+
+.deletebutton:focus {
+  outline: 0;
+}
+
+.deletebutton:active {
+  transform: translateY(2px);
+  box-shadow: 0 0px white;
 }

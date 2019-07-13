@@ -39,6 +39,19 @@ class App extends Component {
     }
   }
 
+  onAppendStock = () => {
+    document.querySelector('.notesinput').value = ''
+    document.querySelector('.add_value').value = ''
+    document.querySelector('.filterinput').value = ''
+    const list = this.state.portfolioList
+    list.push([`${this.state.statistics['01. symbol']}`, `No. of Shares: ${this.state.sharesInput}`, `Total Value of Shares: $${Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100}`, `Notes: ${this.state.notesInput}`])
+    this.setState({portfolioList: list}, () => {
+      this.setState({filteredPortfolioList: this.state.portfolioList})
+    })
+    this.setState({showInfo: false})
+    this.setState({portfolioValue: Math.floor((this.state.portfolioValue + (this.state.sharesInput * this.state.statistics['05. price'])) * 100) / 100})
+  }
+
   onFilterPortfolio = (e) => {
     if (e.target.value === '') {
       this.setState({filteredPortfolioList: this.state.portfolioList})
@@ -47,6 +60,14 @@ class App extends Component {
         return stock[0].includes(e.target.value.toUpperCase())
       })})
     }
+  }
+
+  onDeletePortfolioItem = (e) => {
+    const unfilteredList = this.state.portfolioList
+    const filteredList = this.state.filteredPortfolioList
+    const iD = e.target.parentNode.parentNode.id
+    filteredList.splice(iD, 1)
+    this.setState({filteredPortfolioList: filteredList})
   }
 
   onSearchChange = (e) => {
@@ -59,19 +80,6 @@ class App extends Component {
   
   onNumberOfSharesChange = (e) => {
     this.setState({sharesInput: parseInt(e.target.value)})
-  }
-
-  onAppendStock = () => {
-    document.querySelector('.notesinput').value = ''
-    document.querySelector('.add_value').value = ''
-    document.querySelector('.filterinput').value = ''
-    const list = this.state.portfolioList
-    list.push([`${this.state.statistics['01. symbol']}`, `No. of Shares: ${this.state.sharesInput}`, `Total Current Value of Shares: $${Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100}`, `Notes: ${this.state.notesInput}`])
-    this.setState({portfolioList: list}, () => {
-      this.setState({filteredPortfolioList: this.state.portfolioList})
-    })
-    this.setState({showInfo: false})
-    this.setState({portfolioValue: Math.floor((this.state.portfolioValue + (this.state.sharesInput * this.state.statistics['05. price'])) * 100) / 100})
   }
 
   showBadSearchMessage = () => {
@@ -168,7 +176,7 @@ class App extends Component {
             <div className='info'>
               <div className="infoheader">
                 <p className="twoscreenheaders">Your Stock Search Results:</p>
-                <input className="filterinput placeholder roundsearchbar" placeholder="placeholder"></input>
+                <input className="filterinputplaceholder placeholder roundsearchbar" placeholder="placeholder"></input>
               </div>
               <h1 style={{display: this.state.badSearch === true ? 'block' : 'none'}}>No Results Found.</h1>
               <img src={loading} alt='' className="loading" style={{display: this.state.apiLoading === true ? 'block' : 'none'}}/>
@@ -201,7 +209,17 @@ class App extends Component {
               </div>
               <div>
                 {this.state.filteredPortfolioList.map((stock, i) => {
-                  return <div className="portfoliostockdiv" key={i}><p className="portfoliostockp">{stock[0]}</p><p className="portfoliostockp">{stock[1]}</p><p className="portfoliostockp">{stock[2]}</p><p className="portfoliostockp">{stock[3]}</p></div>
+                  return <div className="portfoliostockdiv" id={i} key={i}>
+                    <div>
+                      <p className="portfoliostockp">{stock[0]}</p>
+                      <p className="portfoliostockp">{stock[1]}</p>
+                      <p className="portfoliostockp">{stock[2]}</p>
+                      <p className="portfoliostockp">{stock[3]}</p>
+                    </div>
+                    <div>
+                      <button className="deletebutton" onClick={this.onDeletePortfolioItem}>X</button>
+                    </div>
+                  </div>
                 })}
               </div>
             </div>
