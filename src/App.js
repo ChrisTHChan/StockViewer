@@ -5,7 +5,6 @@ import StockInformation from './StockInformation'
 import loading from './loading.gif'
 
 //maybe work on header being sticky? see if it looks good?
-//fix the delete button so it appropriately changes the portfolio total value ****
 //Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
 //Add a footer that describes your email, personal contact info, can download your resume (maybe? dunno how to do that.)
 
@@ -35,6 +34,7 @@ class App extends Component {
       dailyLow: '',
       stockVolume: '',
       portfolioList: [],
+      stockValuesList: [],
       filteredPortfolioList: [],
       portfolioValue: 0,
     }
@@ -47,6 +47,9 @@ class App extends Component {
       this.setState({filteredPortfolioList: this.state.portfolioList})
     })
     this.setState({showInfo: false})
+    const valuesList = this.state.stockValuesList
+    valuesList.push(Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100)
+    this.setState({stockValuesList: valuesList})
     this.setState({portfolioValue: Math.floor((this.state.portfolioValue + (this.state.sharesInput * this.state.statistics['05. price'])) * 100) / 100})
     document.querySelector('.notesinput').value = ''
     document.querySelector('.add_value').value = ''
@@ -54,6 +57,7 @@ class App extends Component {
     this.setState({notesInput: ''})
     this.setState({sharesInput: ''})
     this.setState({filterInput: ''})
+    console.log(this.state.stockValuesList)
   }
 
   onFilterPortfolio = (e) => {
@@ -65,8 +69,6 @@ class App extends Component {
           return stock[0].includes(this.state.filterInput.toUpperCase())
         })})
       }
-      console.log(this.state.filteredPortfolioList)
-      console.log(this.state.portfolioList)
     })
   }
 
@@ -76,13 +78,20 @@ class App extends Component {
     const iD = e.target.parentNode.parentNode.id
     unfilteredList.map((stock, i) => {
       if (stock[0] === filteredList[iD][0]) {
-        unfilteredList.splice(i, 1) 
+        const valuesList = this.state.stockValuesList
+        console.log(i)
+        unfilteredList.splice(i, 1)
+        this.setState({portfolioValue: Math.floor((this.state.portfolioValue - this.state.stockValuesList[i]) * 100) / 100}, () => {
+          valuesList.splice(i, 1)
+          this.setState({stockValuesList: valuesList})
+        })
       }
     })
-    this.setState({portfolioList: unfilteredList})
-    this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
-      return stock[0].includes(this.state.filterInput.toUpperCase())
-    })})
+    this.setState({portfolioList: unfilteredList}, () => {
+      this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
+        return stock[0].includes(this.state.filterInput.toUpperCase())
+      })})
+    })
   }
 
   onSearchChange = (e) => {
@@ -185,7 +194,7 @@ class App extends Component {
           <div className="center">
             <div className="searchcontainer">
               <InputField searchChange={this.onSearchChange} enterPress={this.onEnterPress}/>
-              <button className='searchButton' onClick={this.getStocksFunction}>Search!</button>
+              <button className='searchButton' onClick={this.getStocksFunction}>Go!</button>
             </div>
           </div><br/>
           <div className='twoscreencontainer'>
