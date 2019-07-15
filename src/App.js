@@ -5,8 +5,8 @@ import StockInformation from './StockInformation'
 import loading from './loading.gif'
 
 //maybe work on header being sticky? see if it looks good?
+//fix the delete button so it appropriately changes the portfolio total value ****
 //Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
-//Add delete button to remove stocks from your portfolio.
 //Add a footer that describes your email, personal contact info, can download your resume (maybe? dunno how to do that.)
 
 class App extends Component {
@@ -23,6 +23,7 @@ class App extends Component {
       input: '',
       notesInput: '',
       sharesInput: '',
+      filterInput: '',
       userStockSelection: '',
       symbol: '',
       currentPrice: '',
@@ -40,9 +41,6 @@ class App extends Component {
   }
 
   onAppendStock = () => {
-    document.querySelector('.notesinput').value = ''
-    document.querySelector('.add_value').value = ''
-    document.querySelector('.filterinput').value = ''
     const list = this.state.portfolioList
     list.push([`${this.state.statistics['01. symbol']}`, `No. of Shares: ${this.state.sharesInput}`, `Total Value of Shares: $${Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100}`, `Notes: ${this.state.notesInput}`])
     this.setState({portfolioList: list}, () => {
@@ -50,24 +48,41 @@ class App extends Component {
     })
     this.setState({showInfo: false})
     this.setState({portfolioValue: Math.floor((this.state.portfolioValue + (this.state.sharesInput * this.state.statistics['05. price'])) * 100) / 100})
+    document.querySelector('.notesinput').value = ''
+    document.querySelector('.add_value').value = ''
+    document.querySelector('.filterinput').value = ''
+    this.setState({notesInput: ''})
+    this.setState({sharesInput: ''})
+    this.setState({filterInput: ''})
   }
 
   onFilterPortfolio = (e) => {
-    if (e.target.value === '') {
-      this.setState({filteredPortfolioList: this.state.portfolioList})
-    } else {
-      this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
-        return stock[0].includes(e.target.value.toUpperCase())
-      })})
-    }
+    this.setState({filterInput: e.target.value}, () => {
+      if (this.state.filterInput === '') { 
+        this.setState({filteredPortfolioList: this.state.portfolioList})
+      } else {
+        this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
+          return stock[0].includes(this.state.filterInput.toUpperCase())
+        })})
+      }
+      console.log(this.state.filteredPortfolioList)
+      console.log(this.state.portfolioList)
+    })
   }
 
   onDeletePortfolioItem = (e) => {
     const unfilteredList = this.state.portfolioList
     const filteredList = this.state.filteredPortfolioList
     const iD = e.target.parentNode.parentNode.id
-    filteredList.splice(iD, 1)
-    this.setState({filteredPortfolioList: filteredList})
+    unfilteredList.map((stock, i) => {
+      if (stock[0] === filteredList[iD][0]) {
+        unfilteredList.splice(i, 1) 
+      }
+    })
+    this.setState({portfolioList: unfilteredList})
+    this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
+      return stock[0].includes(this.state.filterInput.toUpperCase())
+    })})
   }
 
   onSearchChange = (e) => {
@@ -103,7 +118,6 @@ class App extends Component {
   }
 
   getStocksFunction = () => {
-    document.querySelector('.searchBar').value = ''
     this.setState({showInfo: false})
     this.setState({apiPromiseRejection: false})
     if (this.state.input === '') {
@@ -128,6 +142,8 @@ class App extends Component {
         this.setState({apiPromiseRejection: true})
         console.log(error)
       })
+      document.querySelector('.searchBar').value = ''
+      this.setState({input: ''})
     }
   }
 

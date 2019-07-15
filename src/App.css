@@ -30,12 +30,12 @@
   display: inline-flex;
   border-radius: 50px;
   overflow: hidden;
-  border: 1.3px solid transparent;
+  border: 1.7px solid transparent;
 }
 
 .searchcontainer:focus-within {
   outline: none;
-  border: 1.3px solid lightblue;
+  border: 1.7px solid lightblue;
   border-radius: 50px;
 }
 
@@ -70,13 +70,13 @@
   height: 30px;
   padding: 0 0 0 10px;
   font-size: 18px;
-  border: 1.3px solid lightgrey;
+  border: 1.7px solid lightgrey;
 }
 
 .roundsearchbar:focus {
   outline: none;
   border-radius: 2em;
-  border: 1.3px solid lightblue;
+  border: 1.7px solid lightblue;
 }
 
 .twoscreenheaders {
