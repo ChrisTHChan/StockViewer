@@ -3,8 +3,8 @@ import './App.css';
 import InputField from './InputField';
 import StockInformation from './StockInformation'
 import loading from './loading.gif'
+import scrolldown from './scrolldown.svg'
 
-//maybe work on header being sticky? see if it looks good?
 //Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
 //Add a footer that describes your email, personal contact info, can download your resume (maybe? dunno how to do that.)
 
@@ -19,7 +19,8 @@ class App extends Component {
       apiPromiseRejection: false,
       stockList: [],
       statistics: [],
-      input: '',
+      searchInput: '',
+      previousSearchInput: '',
       notesInput: '',
       sharesInput: '',
       filterInput: '',
@@ -40,13 +41,31 @@ class App extends Component {
     }
   }
 
+  hideScrollDownIcon = () => {
+    document.querySelector('.scrolldownicon').style.display = 'none'
+  }
+
+  showScrollDownIcon = () => {
+    //create if statement here saying only do this if the content overflows the div (not sure how to do that?)
+    document.querySelector('.scrolldownicon').style.display = 'inline-block'
+  }
+  
+  onHandleScroll = (e) => {
+    const floor = Math.floor(e.target.offsetHeight + e.target.scrollTop) === e.target.scrollHeight
+    const ceil = Math.ceil(e.target.offsetHeight + e.target.scrollTop) === e.target.scrollHeight
+    if (floor || ceil) {
+      this.hideScrollDownIcon()
+    } else {
+      this.showScrollDownIcon()
+    }
+  }
+
   onAppendStock = () => {
     const list = this.state.portfolioList
     list.push([`${this.state.statistics['01. symbol']}`, `No. of Shares: ${this.state.sharesInput}`, `Total Value of Shares: $${Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100}`, `Notes: ${this.state.notesInput}`])
     this.setState({portfolioList: list}, () => {
       this.setState({filteredPortfolioList: this.state.portfolioList})
     })
-    this.setState({showInfo: false})
     const valuesList = this.state.stockValuesList
     valuesList.push(Math.floor((this.state.sharesInput * this.state.statistics['05. price']) * 100) / 100)
     this.setState({stockValuesList: valuesList})
@@ -57,7 +76,8 @@ class App extends Component {
     this.setState({notesInput: ''})
     this.setState({sharesInput: ''})
     this.setState({filterInput: ''})
-    console.log(this.state.stockValuesList)
+    this.hideScrollDownIcon()
+    this.setState({showInfo: false})
   }
 
   onFilterPortfolio = (e) => {
@@ -79,13 +99,13 @@ class App extends Component {
     unfilteredList.map((stock, i) => {
       if (stock[0] === filteredList[iD][0]) {
         const valuesList = this.state.stockValuesList
-        console.log(i)
         unfilteredList.splice(i, 1)
         this.setState({portfolioValue: Math.floor((this.state.portfolioValue - this.state.stockValuesList[i]) * 100) / 100}, () => {
           valuesList.splice(i, 1)
           this.setState({stockValuesList: valuesList})
         })
       }
+      return unfilteredList;
     })
     this.setState({portfolioList: unfilteredList}, () => {
       this.setState({filteredPortfolioList: this.state.portfolioList.filter(stock => {
@@ -95,7 +115,7 @@ class App extends Component {
   }
 
   onSearchChange = (e) => {
-    this.setState({input: e.target.value.toUpperCase()})
+    this.setState({searchInput: e.target.value.toUpperCase()})
   }
 
   onNotesChange = (e) => {
@@ -126,17 +146,24 @@ class App extends Component {
     }
   }
 
+  onBackToSearch = () => {
+    this.setState({searchInput: this.state.previousSearchInput}, () => {
+      this.getStocksFunction()
+    })
+  }
+
   getStocksFunction = () => {
     this.setState({showInfo: false})
     this.setState({apiPromiseRejection: false})
-    if (this.state.input === '') {
+    if (this.state.searchInput === '') {
       this.showBadSearchMessage()
       this.unmountStockList()
     } else {
+      this.hideScrollDownIcon()
       this.setState({apiLoading: true})
       this.setState({badSearch: false})
       this.unmountStockList()
-      fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${this.state.input}&apikey=0TNNIAKWYZEM67YS`)
+      fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${this.state.searchInput}&apikey=0TNNIAKWYZEM67YS`)
       .then(response => response.json())
       .then(stocks => this.setState({stockList: stocks['bestMatches']}, () => {
         if (this.state.stockList.length === 0) {
@@ -145,6 +172,7 @@ class App extends Component {
         } else {
           this.setState({showStockList: true})
           this.setState({apiLoading: false})
+          this.showScrollDownIcon()
         }
       }))
       .catch((error) => {
@@ -152,18 +180,22 @@ class App extends Component {
         console.log(error)
       })
       document.querySelector('.searchBar').value = ''
-      this.setState({input: ''})
+      this.setState({previousSearchInput: this.state.searchInput}, () => {
+        this.setState({searchInput: ''})
+      })
     }
   }
 
   getInfoFunction = (e) => {
     this.unmountStockList()
     this.setState({apiLoading: true})
+    this.hideScrollDownIcon()
     this.setState({userStockSelection: this.state.stockList[e.target.id]['1. symbol']}, () => {
       fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${this.state.userStockSelection}&apikey=0TNNIAKWYZEM67YS`)
       .then(response => response.json())
       .then(info => this.setState({statistics: info['Global Quote']}, () => {
         this.setState({apiLoading: false})
+        this.showScrollDownIcon()
         this.setState({badSearch: false})
         this.setState({symbol: this.state.statistics['01. symbol']})
         this.setState({currentPrice: this.state.statistics['05. price']})
@@ -196,9 +228,10 @@ class App extends Component {
               <InputField searchChange={this.onSearchChange} enterPress={this.onEnterPress}/>
               <button className='searchButton' onClick={this.getStocksFunction}>Go!</button>
             </div>
-          </div><br/>
+          </div>
           <div className='twoscreencontainer'>
-            <div className='info'>
+            <div className='info' onScroll={this.onHandleScroll}>
+              <img className="scrolldownicon" src={scrolldown} alt=''></img>
               <div className="infoheader">
                 <p className="twoscreenheaders">Your Stock Search Results:</p>
                 <input className="filterinputplaceholder placeholder roundsearchbar" placeholder="placeholder"></input>
@@ -225,7 +258,8 @@ class App extends Component {
                         notesChange={this.onNotesChange}
                         enterPressShares={this.onEnterPressShares}
                         appendStock={this.onAppendStock}
-                        numberOfSharesChange={this.onNumberOfSharesChange}/>
+                        numberOfSharesChange={this.onNumberOfSharesChange}
+                        backToSearch={this.onBackToSearch}/>
             </div>
             <div className='portfolio'>
               <div className="portfolioheader">
@@ -254,7 +288,7 @@ class App extends Component {
     } else if (this.state.apiPromiseRejection === true) {
       return (
         <div className="App">
-          <h1>Failed to retrieve data! Check your internet, or try again later!</h1>
+          <h1>Failed to retrieve data! Check your internet, and refresh!</h1>
         </div>
       )
     }
