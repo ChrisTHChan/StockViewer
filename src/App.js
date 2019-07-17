@@ -5,8 +5,8 @@ import StockInformation from './StockInformation'
 import loading from './loading.gif'
 import scrolldown from './scrolldown.svg'
 
-//Add click functionality to the left side portfolio div's so you can click them to retrieve the stocks info.
-//Add a footer that describes your email, personal contact info, can download your resume (maybe? dunno how to do that.)
+//Add click functionality to the portfolio div's so you can click them to retrieve the stocks info.
+//organize functions in code, make it easier to read, add notes
 
 class App extends Component {
   constructor() {
@@ -150,6 +150,12 @@ class App extends Component {
     this.setState({searchInput: this.state.previousSearchInput}, () => {
       this.getStocksFunction()
     })
+    document.querySelector('.notesinput').value = ''
+    document.querySelector('.add_value').value = ''
+    document.querySelector('.filterinput').value = ''
+    this.setState({notesInput: ''})
+    this.setState({sharesInput: ''})
+    this.setState({filterInput: ''})
   }
 
   getStocksFunction = () => {
