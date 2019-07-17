@@ -268,25 +268,25 @@ class App extends Component {
                         backToSearch={this.onBackToSearch}/>
             </div>
             <div className='portfolio'>
-              <div className="portfolioheader">
-                <p className="twoscreenheaders">Portfolio Value: ${this.state.portfolioValue}</p>
-                <input placeholder="Filter your portfolio!" className="filterinput roundsearchbar" onChange={this.onFilterPortfolio}></input>
-              </div>
-              <div>
-                {this.state.filteredPortfolioList.map((stock, i) => {
-                  return <div className="portfoliostockdiv" id={i} key={i}>
-                    <div>
-                      <p className="portfoliostockp">{stock[0]}</p>
-                      <p className="portfoliostockp">{stock[1]}</p>
-                      <p className="portfoliostockp">{stock[2]}</p>
-                      <p className="portfoliostockp">{stock[3]}</p>
+                <div className="portfolioheader">
+                  <p className="twoscreenheaders">Portfolio Value: ${this.state.portfolioValue}</p>
+                  <input placeholder="Filter your portfolio!" className="filterinput roundsearchbar" onChange={this.onFilterPortfolio}></input>
+                </div>
+                <div>
+                  {this.state.filteredPortfolioList.map((stock, i) => {
+                    return <div className="portfoliostockdiv" id={i} key={i}>
+                      <div>
+                        <p className="portfoliostockp">{stock[0]}</p>
+                        <p className="portfoliostockp">{stock[1]}</p>
+                        <p className="portfoliostockp">{stock[2]}</p>
+                        <p className="portfoliostockp">{stock[3]}</p>
+                      </div>
+                      <div>
+                        <button className="deletebutton" onClick={this.onDeletePortfolioItem}>X</button>
+                      </div>
                     </div>
-                    <div>
-                      <button className="deletebutton" onClick={this.onDeletePortfolioItem}>X</button>
-                    </div>
-                  </div>
-                })}
-              </div>
+                  })}
+                </div>
             </div>
           </div>
         </div>
