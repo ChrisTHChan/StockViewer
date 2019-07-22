@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/StockViewer/static/css/main.af556a1b.chunk.css",
+    "main.js": "/StockViewer/static/js/main.1e6a7fbb.chunk.js",
+    "main.js.map": "/StockViewer/static/js/main.1e6a7fbb.chunk.js.map",
+    "runtime~main.js": "/StockViewer/static/js/runtime~main.b053cead.js",
+    "runtime~main.js.map": "/StockViewer/static/js/runtime~main.b053cead.js.map",
+    "static/js/2.179f4c70.chunk.js": "/StockViewer/static/js/2.179f4c70.chunk.js",
+    "static/js/2.179f4c70.chunk.js.map": "/StockViewer/static/js/2.179f4c70.chunk.js.map",
+    "index.html": "/StockViewer/index.html",
+    "precache-manifest.c862867984c48f3524fa64271dfc634b.js": "/StockViewer/precache-manifest.c862867984c48f3524fa64271dfc634b.js",
+    "service-worker.js": "/StockViewer/service-worker.js",
+    "static/css/main.af556a1b.chunk.css.map": "/StockViewer/static/css/main.af556a1b.chunk.css.map",
+    "static/media/App.css": "/StockViewer/static/media/header.c6183db6.jpg",
+    "static/media/scrolldown.svg": "/StockViewer/static/media/scrolldown.67f2b4f6.svg"
+  }
+}
