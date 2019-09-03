@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
-import './App.css';
-import InputField from './InputField';
-import StockInformation from './StockInformation'
-import loading from './loading.gif'
-import scrolldown from './scrolldown.svg'
-
-//Add click functionality to the portfolio div's so you can click them to retrieve the stocks info.
-//organize functions in code, make it easier to read, add notes
+import './stylesheets/App.css';
+import InputField from './components/InputField';
+import StockInformation from './components/StockInformation'
+import loading from './assets/loading.gif'
+import scrolldown from './assets/scrolldown.svg'
 
 class App extends Component {
   constructor() {
