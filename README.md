@@ -5,5 +5,3 @@ Link: https://mrchrischan.github.io/StockViewer/
 
 Type a stock ticker into the search bar, press enter, and follow along with the
 various options you have to create your own personalised portfolio of stocks!
-
-Created and built using create-react-app
